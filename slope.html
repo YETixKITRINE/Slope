@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Slope and Intercept Visualizer</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .container { max-width: 400px; margin: auto; }
+        label, input { display: block; margin-bottom: 10px; }
+        canvas { border: 1px solid #333; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Slope & Intercept Visualizer</h2>
+        <label for="slope">Slope (m):</label>
+        <input type="number" id="slope" value="1" step="any">
+        <label for="intercept">Intercept (b):</label>
+        <input type="number" id="intercept" value="0" step="any">
+        <button onclick="drawLine()">Plot Line</button>
+        <canvas id="plot" width="350" height="350"></canvas>
+    </div>
+    <script>
+        function drawLine() {
+            const slope = parseFloat(document.getElementById('slope').value);
+            const intercept = parseFloat(document.getElementById('intercept').value);
+            const canvas = document.getElementById('plot');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Draw axes
+            ctx.strokeStyle = '#888';
+            ctx.beginPath();
+            ctx.moveTo(0, canvas.height/2);
+            ctx.lineTo(canvas.width, canvas.height/2);
+            ctx.moveTo(canvas.width/2, 0);
+            ctx.lineTo(canvas.width/2, canvas.height);
+            ctx.stroke();
+            // Plot line
+            ctx.strokeStyle = '#0074D9';
+            ctx.beginPath();
+            for (let px = 0; px <= canvas.width; px++) {
+                let x = (px - canvas.width/2) / 25; // scale x: -7 to 7
+                let y = slope * x + intercept;
+                let py = canvas.height/2 - y * 25; // scale y
+                if (px === 0) ctx.moveTo(px, py);
+                else ctx.lineTo(px, py);
+            }
+            ctx.stroke();
+        }
+        drawLine(); // Initial plot
+    </script>
+</body>
+</html>
